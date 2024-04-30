@@ -4,9 +4,19 @@ const Node = (value = null, next = null) => {
 
 const LinkedList = () => {
   let headNode = null;
+  let tailNode = null;
+  let listSize = 0;
 
-  const getHeadNode = () => {
+  const size = () => {
+    return listSize;
+  };
+
+  const head = () => {
     return headNode;
+  };
+
+  const tail = () => {
+    return tailNode;
   };
 
   const append = (value) => {
@@ -22,17 +32,26 @@ const LinkedList = () => {
       temp.next = newNode;
     }
 
-    // just to confirm the new node that is created
-    return newNode;
+    tailNode = newNode;
+    listSize++;
   };
 
   const prepend = (value) => {
     const newNode = Node(value, headNode);
     headNode = newNode;
-
-    // just to confirm the new node that is created
-    return headNode;
+    listSize++;
   };
 
-  return { getHeadNode, append, prepend };
+  const at = (index) => {
+    if (index >= listSize || index < 0) {
+      return null;
+    }
+    let temp = headNode;
+    for (let i = 0; i < index; i++) {
+      temp = headNode.next;
+    }
+    return temp;
+  };
+
+  return { append, prepend, size, head, tail, at };
 };
