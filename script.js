@@ -53,5 +53,72 @@ const LinkedList = () => {
     return temp;
   };
 
-  return { append, prepend, size, head, tail, at };
+  const pop = () => {
+    if (!headNode) return;
+
+    if (!headNode.next) {
+      headNode = null;
+      tailNode = null;
+      listSize--;
+      return;
+    }
+
+    let temp = headNode;
+    while (temp.next.next) {
+      temp = temp.next;
+    }
+    temp.next = null;
+    tailNode = temp;
+    listSize--;
+    return;
+  };
+
+  const contains = (target) => {
+    let temp = headNode;
+    let index = 0;
+    while (temp) {
+      if (temp.value == target) return true;
+      index++;
+      temp = temp.next;
+    }
+    return false;
+  };
+
+  const find = (target) => {
+    let temp = headNode;
+    let index = 0;
+    while (temp) {
+      if (temp.value == target) return index;
+      index++;
+      temp = temp.next;
+    }
+    return null;
+  };
+
+  const toString = () => {
+    let stringToPrint = '';
+
+    let temp = headNode;
+
+    while (temp) {
+      stringToPrint += temp.value + ' => ';
+      temp = temp.next;
+    }
+    stringToPrint += 'null';
+
+    console.log(stringToPrint);
+  };
+
+  return {
+    append,
+    prepend,
+    size,
+    head,
+    tail,
+    at,
+    pop,
+    contains,
+    find,
+    toString,
+  };
 };
