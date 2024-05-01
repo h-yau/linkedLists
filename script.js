@@ -25,11 +25,7 @@ const LinkedList = () => {
     if (!headNode) {
       headNode = newNode;
     } else {
-      let temp = headNode;
-      while (temp.next != null) {
-        temp = temp.next;
-      }
-      temp.next = newNode;
+      tailNode.next = newNode;
     }
 
     tailNode = newNode;
@@ -48,7 +44,7 @@ const LinkedList = () => {
     }
     let temp = headNode;
     for (let i = 0; i < index; i++) {
-      temp = headNode.next;
+      temp = temp.next;
     }
     return temp;
   };
@@ -109,6 +105,65 @@ const LinkedList = () => {
     console.log(stringToPrint);
   };
 
+  const insertAt = (value, index) => {
+    if (index > listSize || index < 0) {
+      console.error('Invalid index for insertion');
+      return;
+    }
+
+    if (index == 0) {
+      prepend(value);
+      return;
+    } else if (index == listSize) {
+      append(value);
+      return;
+    } else {
+      let temp = headNode;
+      let currentIndex = 0;
+      while (temp) {
+        if (currentIndex == index - 1) {
+          const newNode = Node(value, temp.next);
+          temp.next = newNode;
+          break;
+        }
+      }
+      temp = temp.next;
+      listSize++;
+    }
+
+    return;
+  };
+
+  const removeAt = (index) => {
+    if (index < 0 || index >= listSize) {
+      console.error('Invalid index for removal');
+      return;
+    }
+
+    if (index == 0) {
+      headNode = headNode.next;
+      listSize--;
+      return;
+    } else if (index == listSize - 1) {
+      pop();
+      return;
+    } else {
+      let temp = headNode;
+      let currentIndex = 0;
+      while (temp && currentIndex < index - 1) {
+        temp = temp.next;
+        currentIndex++;
+      }
+
+      const pointer = temp.next;
+      temp.next = temp.next.next;
+      pointer.next = null;
+
+      listSize--;
+      return;
+    }
+  };
+
   return {
     append,
     prepend,
@@ -120,5 +175,58 @@ const LinkedList = () => {
     contains,
     find,
     toString,
+    insertAt,
+    removeAt,
   };
 };
+
+// test
+
+const list1 = LinkedList();
+
+list1.append(1);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.append(2);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.prepend(3);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.pop();
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+console.log('Contains 2 (expect false):', list1.contains(2)); //expect false
+console.log('Contains 3 (expect true):', list1.contains(3)); // expect true
+
+list1.insertAt(5, 5); // expect error
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.insertAt(10, 2);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.insertAt(0, 0);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.insertAt(50, 1);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+console.log('Contains 50:', list1.contains(50));
+
+console.log('Find 50:', list1.find(50));
+
+list1.removeAt(10); //expect error
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
+
+list1.removeAt(3);
+console.log(list1.size(), list1.head(), list1.tail());
+list1.toString();
